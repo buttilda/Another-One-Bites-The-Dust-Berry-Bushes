@@ -18,7 +18,7 @@ public class BerryBushAddon implements IAOBDAddon {
 	@Override
 	public void receiveOreList(Collection<Ore> ores) {
 		for (Ore ore : ores) {
-			if (blacklist.contains(ore.name()))
+			if (blacklist.contains(ore.name().toLowerCase()))
 				continue;
 			String base = "berry";
 			AOBDItem berry = new AOBDItem(base, ore) {

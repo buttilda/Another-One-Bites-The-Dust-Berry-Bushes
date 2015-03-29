@@ -8,6 +8,7 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_NUMBER, dependencies = Reference.DEPENDENCIES)//, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class AOBDBB {
@@ -26,5 +27,6 @@ public class AOBDBB {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		GameRegistry.registerWorldGenerator(new AOBDBBWorldGenerator(), 0);
 	}
 }

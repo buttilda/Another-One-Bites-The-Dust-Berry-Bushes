@@ -1,8 +1,5 @@
 # Items
-item.aobd.dust.name=%s Dust
+item.aobdbb.berry.name=%s Berry
 
 # Blocks
-tile.aobd.block.name=%s Block
-
-# Creative Tab
-itemGroup.aobdbb=AOBDBB
+tile.aobdbb.bush.name=%s Bush

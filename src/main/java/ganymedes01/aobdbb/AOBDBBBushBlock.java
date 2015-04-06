@@ -2,6 +2,7 @@ package ganymedes01.aobdbb;
 
 import ganymedes01.aobd.blocks.AOBDBlock;
 import ganymedes01.aobd.ore.Ore;
+import ganymedes01.aobdbb.configuration.BerryBushConfigs;
 import ganymedes01.aobdbb.lib.Reference;
 
 import java.util.Random;
@@ -27,9 +28,11 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 	private IIcon[] fancyIcons;
 	@SideOnly(Side.CLIENT)
 	private IIcon[] fastIcons;
+	private final Ore ore;
 
 	public AOBDBBBushBlock(String base, Ore ore) {
 		super(Material.leaves, base, ore);
+		this.ore = ore;
 		setHardness(0.3F);
 		setTickRandomly(true);
 		setBlockName(Reference.MOD_ID + "." + base + ore);
@@ -54,17 +57,18 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		if (world.getBlockLightValue(x, y + 1, z) < 9) {
 			int meta = world.getBlockMetadata(x, y, z);
-			if (meta < 7)
-				if (rand.nextInt(26) == 0)
+			if (meta < 7) {
+				BerryBushConfigs config = BerryBushAddon.bushMap.get(ore);
+				if (config != null && rand.nextDouble() <= config.getGrowthChance())
 					world.setBlockMetadataWithNotify(x, y, z, ++meta, 2);
+			}
 		}
 	}
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		if (world.getFullBlockLightValue(x, y, z) < 13)
-			if (world.getBlock(x, y - 1, z).isSideSolid(world, x, y - 1, z, ForgeDirection.UP))
-				return super.canPlaceBlockAt(world, x, y, z);
+		if (world.getBlock(x, y - 1, z).isSideSolid(world, x, y - 1, z, ForgeDirection.UP))
+			return super.canPlaceBlockAt(world, x, y, z);
 		return false;
 	}
 

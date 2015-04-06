@@ -1,6 +1,7 @@
 package ganymedes01.aobdbb;
 
 import ganymedes01.aobd.ore.Ore;
+import ganymedes01.aobdbb.configuration.BerryBushConfigs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,30 +36,35 @@ public class AOBDBBWorldGenerator implements IWorldGenerator {
 	}
 
 	private void generateBushes(Random rand, int xPos, int zPos, World world) {
-		for (Entry<Ore, Block> entry : BerryBushAddon.bushMap.entrySet()) {
-			int minY = 0;
-			int maxY = 256;
-			int veinMaxSize = 4;
-			float genChance = 1F / 6F;
+		for (Entry<Ore, BerryBushConfigs> entry : BerryBushAddon.bushMap.entrySet()) {
+			BerryBushConfigs config = entry.getValue();
+			if (!config.isEnabled())
+				continue;
+			Block bush = config.getBush();
+			int minY = config.getMinY();
+			int maxY = config.getMaxY();
+			int veinMaxSize = config.getMaxVeinSize();
+			double genChance = config.getGenChance();
 
-			if (rand.nextFloat() <= genChance) {
+			if (rand.nextDouble() <= genChance) {
 				int x = xPos + rand.nextInt(16);
 				int y = minY;
 				int z = zPos + rand.nextInt(16);
 				// Go from bottom to top trying to find an air block
 				while (y < maxY) {
-					if (isAir(world, x, y, z) && entry.getValue().canPlaceBlockAt(world, x, y, z)) {
+					if (isAir(world, x, y, z) && bush.canPlaceBlockAt(world, x, y, z)) {
 						// When an air block is found, look around it for other air blocks
 						int airsFound = 0;
 						for (BlockPos pos : positions)
 							if (isAir(world, x + pos.x, y + pos.y, z + pos.z))
-								airsFound++;
-						// If the amount of "airs" found is bigger than 10, generate the bush
+								if (++airsFound >= 10)
+									break;
+						// If the amount of "airs" found is bigger than 10, generate the bushes
 						if (airsFound >= 10) {
 							int set = 0;
 							for (BlockPos pos : positions)
 								if (isAir(world, x + pos.x, y + pos.y, z + pos.z) && rand.nextFloat() >= 0.5F)
-									if (world.setBlock(x + pos.x, y + pos.y, z + pos.z, entry.getValue(), 7, 2))
+									if (world.setBlock(x + pos.x, y + pos.y, z + pos.z, bush, 7, 2))
 										if (++set >= veinMaxSize || rand.nextFloat() >= 0.8F && set > 0)
 											break;
 							break;

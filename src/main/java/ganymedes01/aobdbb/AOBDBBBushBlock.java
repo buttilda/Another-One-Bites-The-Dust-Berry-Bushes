@@ -5,36 +5,57 @@ import ganymedes01.aobd.ore.Ore;
 import ganymedes01.aobdbb.configuration.BerryBushConfigs;
 import ganymedes01.aobdbb.lib.Reference;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable {
 
+	public static enum RenderingStage {
+		BUSH,
+		BERRY,
+		BERRY_OVERLAY
+	}
+
+	public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+	public static final int MAX_GROWTH_META = 7;
+
 	@SideOnly(Side.CLIENT)
-	private IIcon[] fancyIcons;
+	private IIcon fancy, fast, berry, berryOverlay;
 	@SideOnly(Side.CLIENT)
-	private IIcon[] fastIcons;
+	public RenderingStage renderingStage = RenderingStage.BUSH;
+
+	private final Item berryItem;
 	private final Ore ore;
 
-	public AOBDBBBushBlock(String base, Ore ore) {
+	public AOBDBBBushBlock(Item berry, String base, Ore ore) {
 		super(Material.leaves, base, ore);
 		this.ore = ore;
+		berryItem = berry;
+
 		setHardness(0.3F);
 		setTickRandomly(true);
+		setHarvestLevel("axe", 2);
+		setStepSound(soundTypeGrass);
 		setBlockName(Reference.MOD_ID + "." + base + ore);
 		setBlockTextureName(Reference.MOD_ID + ":" + base);
 	}
@@ -57,9 +78,11 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		if (world.getBlockLightValue(x, y + 1, z) < 9) {
 			int meta = world.getBlockMetadata(x, y, z);
-			if (meta < 7) {
+			if (meta <= MAX_GROWTH_META) {
 				BerryBushConfigs config = BerryBushAddon.bushMap.get(ore);
-				if (config != null && rand.nextDouble() <= config.getGrowthChance())
+				double chance = meta == MAX_GROWTH_META ? config.getGrowthChance() * 0.75 : config.getGrowthChance();
+				chance = 1;
+				if (config != null && rand.nextDouble() <= chance)
 					world.setBlockMetadataWithNotify(x, y, z, ++meta, 2);
 			}
 		}
@@ -73,8 +96,13 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 	}
 
 	@Override
+	public boolean canBlockStay(World world, int x, int y, int z) {
+		return world.getBlock(x, y - 1, z).isSideSolid(world, x, y - 1, z, ForgeDirection.UP);
+	}
+
+	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-		return world.getBlockMetadata(x, y, z) >= 7;
+		return world.getBlockMetadata(x, y, z) >= MAX_GROWTH_META;
 	}
 
 	@Override
@@ -92,25 +120,93 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 		return world.getBlockMetadata(x, y, z);
 	}
 
-	// Growable
-
 	@Override
-	public boolean func_149851_a(World p_149851_1_, int p_149851_2_, int p_149851_3_, int p_149851_4_, boolean p_149851_5_) {
-		return p_149851_1_.getBlockMetadata(p_149851_2_, p_149851_3_, p_149851_4_) != 7;
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
+		if (!canBlockStay(world, x, y, z)) {
+			dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+			world.setBlockToAir(x, y, z);
+		}
 	}
 
 	@Override
-	public boolean func_149852_a(World p_149852_1_, Random p_149852_2_, int p_149852_3_, int p_149852_4_, int p_149852_5_) {
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		ArrayList<ItemStack> drops = super.getDrops(world, x, y, z, meta, fortune);
+		if (meta > MAX_GROWTH_META)
+			drops.add(new ItemStack(berryItem));
+		return drops;
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		int meta = world.getBlockMetadata(x, y, z);
+		if (meta > MAX_GROWTH_META) {
+			addToPlayerInventory(player, new ItemStack(berryItem), x, y, z);
+			if (!player.capabilities.isCreativeMode)
+				world.setBlockMetadataWithNotify(x, y, z, MAX_GROWTH_META, 2);
+			return true;
+		}
+
+		return false;
+	}
+
+	private void addToPlayerInventory(EntityPlayer player, ItemStack stack, double x, double y, double z) {
+		if (!player.worldObj.isRemote) {
+			EntityItem entity = new EntityItem(player.worldObj, x + 0.5, y, z + 0.5, stack);
+			entity.motionX = 0;
+			entity.motionY = 0;
+			entity.motionZ = 0;
+			entity.delayBeforeCanPickup = 0;
+			player.worldObj.spawnEntityInWorld(entity);
+
+			entity.onCollideWithPlayer(player);
+		}
+	}
+
+	// Growable
+
+	@Override
+	public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
+		return world.getBlockMetadata(x, y, z) != MAX_GROWTH_META;
+	}
+
+	@Override
+	public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
 		return true;
 	}
 
 	@Override
 	public void func_149853_b(World world, Random rand, int x, int y, int z) {
-		int meta = Math.min(7, world.getBlockMetadata(x, y, z) + MathHelper.getRandomIntegerInRange(rand, 2, 5));
-		world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+		world.setBlockMetadataWithNotify(x, y, z, Math.min(MAX_GROWTH_META, world.getBlockMetadata(x, y, z) + 1), 2);
 	}
 
 	// Rendering
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
+		return getRenderColor(world.getBlockMetadata(x, y, z));
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getRenderColor(int meta) {
+		switch (renderingStage) {
+			case BERRY:
+				return ore.colour();
+			case BUSH:
+				BerryBushConfigs config = BerryBushAddon.bushMap.get(ore);
+				return config.getBushColour();
+			case BERRY_OVERLAY:
+				return ore.getColour().darker().darker().getRGB();
+			default:
+				return 0xFFFFFF;
+		}
+	}
+
+	@Override
+	public int getRenderType() {
+		return RENDER_ID;
+	}
 
 	@Override
 	public boolean isOpaqueCube() {
@@ -135,17 +231,30 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		IIcon[] icons = Blocks.leaves.isOpaqueCube() ? fastIcons : fancyIcons;
-		return icons[meta == 7 ? 1 : 0];
+		switch (renderingStage) {
+			case BERRY:
+				return berry;
+			case BERRY_OVERLAY:
+				return berryOverlay;
+			case BUSH:
+			default:
+				return Blocks.leaves.isOpaqueCube() ? fast : fancy;
+		}
 	}
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
+		meta = Math.min(MAX_GROWTH_META, meta);
 		if (meta % 2 == 0)
 			meta++;
 		float rate = 1 - (meta + 1) * 2 / 16F;
 		setBlockBounds(rate / 2F, 0, rate / 2F, 1 - rate / 2F, 1 - rate, 1 - rate / 2F);
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		return null;
 	}
 
 	@Override
@@ -156,11 +265,9 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		fancyIcons = new IIcon[2];
-		fastIcons = new IIcon[2];
-		fancyIcons[0] = reg.registerIcon(getTextureName() + "_fancy");
-		fastIcons[0] = reg.registerIcon(getTextureName() + "_fast");
-		fancyIcons[1] = reg.registerIcon(getTextureName() + "_ripe_fancy");
-		fastIcons[1] = reg.registerIcon(getTextureName() + "_ripe_fast");
+		fancy = reg.registerIcon(getTextureName() + "_fancy");
+		fast = reg.registerIcon(getTextureName() + "_fast");
+		berry = reg.registerIcon(getTextureName() + "_berries");
+		berryOverlay = reg.registerIcon(getTextureName() + "_berries_overlay");
 	}
 }

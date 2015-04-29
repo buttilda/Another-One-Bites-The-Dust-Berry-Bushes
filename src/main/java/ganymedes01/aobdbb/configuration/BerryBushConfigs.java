@@ -8,7 +8,7 @@ public class BerryBushConfigs {
 	private boolean isEnabled = true;
 	private Block bush;
 	private Item berry;
-	private int minY = 0, maxY = 256, maxVeinSize = 4;
+	private int minY = 0, maxY = 256, maxVeinSize = 4, bushColour;
 	private double genChance = 0.02F, growthChance = 0.03F;
 
 	public BerryBushConfigs(double factor) {
@@ -78,5 +78,13 @@ public class BerryBushConfigs {
 
 	public void setGrowthChance(double growthChance) {
 		this.growthChance = growthChance;
+	}
+
+	public int getBushColour() {
+		return bushColour & 0x00FFFFFF;
+	}
+
+	public void setBushColour(int bushColour) {
+		this.bushColour = bushColour;
 	}
 }

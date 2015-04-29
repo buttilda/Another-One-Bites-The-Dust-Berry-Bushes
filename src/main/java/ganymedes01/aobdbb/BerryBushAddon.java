@@ -12,22 +12,31 @@ import ganymedes01.aobdbb.lib.Reference;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BerryBushAddon implements IAOBDAddon {
 
-	private static final List<String> blacklist = Arrays.asList("iron", "gold", "aluminium", "tin", "copper", "silver");
+	private static List<String> blacklist;
 
 	public static Map<Ore, BerryBushConfigs> bushMap = new HashMap<Ore, BerryBushConfigs>();
 
 	@Override
 	public void receiveOreList(Collection<Ore> ores) {
+		if (Loader.isModLoaded("TConstruct"))
+			blacklist = Arrays.asList("iron", "gold", "aluminium", "tin", "copper");
+		else
+			blacklist = Collections.emptyList();
+
 		for (Ore ore : ores) {
 			if (!ore.isEnabled())
 				continue;
@@ -50,6 +59,12 @@ public class BerryBushAddon implements IAOBDAddon {
 				protected String getShortName() {
 					return "item." + Reference.MOD_ID + "." + base + ".name";
 				}
+
+				@Override
+				@SideOnly(Side.CLIENT)
+				public int getColorFromItemStack(ItemStack stack, int pass) {
+					return pass == 0 ? ore.colour() : ore.getColour().darker().darker().getRGB() & 0x00FFFFFF;
+				}
 			};
 			berry.setTextureName(Reference.MOD_ID + ":" + base);
 			berry.setUnlocalizedName(Reference.MOD_ID + "." + base + ore);
@@ -58,7 +73,7 @@ public class BerryBushAddon implements IAOBDAddon {
 
 			// Create the bush block
 			base = "bush";
-			AOBDBlock bush = new AOBDBBBushBlock(base, ore);
+			AOBDBlock bush = new AOBDBBBushBlock(berry, base, ore);
 			OreFinder.registerOre(base + ore.name(), bush);
 			config.setBush(bush);
 

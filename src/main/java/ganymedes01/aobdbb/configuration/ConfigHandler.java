@@ -4,6 +4,7 @@ import ganymedes01.aobd.lib.Reference;
 import ganymedes01.aobd.ore.Ore;
 import ganymedes01.aobdbb.BerryBushAddon;
 
+import java.awt.Color;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -27,15 +28,40 @@ public class ConfigHandler {
 		usedCategories.clear();
 		for (Entry<Ore, BerryBushConfigs> entry : BerryBushAddon.bushMap.entrySet())
 			init(entry.getKey().name(), entry.getValue());
+		initColourConfigs();
 	}
 
 	public BerryBushConfigs init(Ore ore) {
-		String name = ore.name();
-
 		BerryBushConfigs config = new BerryBushConfigs((float) ore.energy(1));
-		init(name, config);
+		init(ore.name(), config);
 
 		return config;
+	}
+
+	public void initColourConfigs() {
+		for (Entry<Ore, BerryBushConfigs> entry : BerryBushAddon.bushMap.entrySet()) {
+			Ore ore = entry.getKey();
+			BerryBushConfigs config = entry.getValue();
+
+			Color bushColour = ore.getColour();
+			float r = 1 - bushColour.getRed() / 255F;
+			float g = 1 - bushColour.getGreen() / 255F;
+			float b = 1 - bushColour.getBlue() / 255F;
+			float mean = (r + g + b) / 3F;
+			bushColour = new Color(r, g, b);
+			if (mean <= 0.5F)
+				bushColour = bushColour.brighter();
+			else if (mean <= 0.25F)
+				bushColour = bushColour.brighter().brighter();
+			else if (mean >= 0.75F)
+				bushColour = bushColour.darker().darker();
+			else if (mean >= 0.5F)
+				bushColour = bushColour.darker();
+
+			config.setBushColour(getColour(ore.name(), "Bush Colour", bushColour.getRGB() & 0x00FFFFFF));
+			if (configFile.hasChanged())
+				configFile.save();
+		}
 	}
 
 	public void init(String name, BerryBushConfigs config) {
@@ -69,5 +95,13 @@ public class ConfigHandler {
 
 	private int getInt(String category, String name, int def) {
 		return configFile.get(category, name, def).getInt(def);
+	}
+
+	private int getColour(String category, String name, int def) {
+		return Color.decode(getString(category, name, "0x" + Integer.toHexString(def))).getRGB();
+	}
+
+	private String getString(String category, String name, String def) {
+		return configFile.get(category, name, def).getString();
 	}
 }

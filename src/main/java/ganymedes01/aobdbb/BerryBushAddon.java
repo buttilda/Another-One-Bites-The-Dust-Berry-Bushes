@@ -12,7 +12,6 @@ import ganymedes01.aobdbb.lib.Reference;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -23,16 +22,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BerryBushAddon implements IAOBDAddon {
 
-	private static List<String> blacklist;
-
 	public static Map<Ore, BerryBushConfigs> bushMap = new HashMap<Ore, BerryBushConfigs>();
 
 	@Override
 	public void receiveOreList(Collection<Ore> ores) {
 		for (Ore ore : ores) {
 			if (!ore.isEnabled())
-				continue;
-			if (blacklist.contains(ore.name().toLowerCase()))
 				continue;
 			if (!OreDictionary.getOres("oreberry" + ore.name(), false).isEmpty())
 				continue;

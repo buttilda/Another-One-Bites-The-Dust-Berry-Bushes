@@ -48,7 +48,7 @@ public class BerryBushAddon implements IAOBDAddon {
 				continue;
 
 			// Create the berry item
-			String base = "berry";
+			String base = "oreberry";
 			AOBDItem berry = new AOBDItem(base, ore) {
 				@Override
 				protected String getFullName() {
@@ -72,7 +72,7 @@ public class BerryBushAddon implements IAOBDAddon {
 			config.setBerry(berry);
 
 			// Create the bush block
-			base = "bush";
+			base = "orebush";
 			AOBDBlock bush = new AOBDBBBushBlock(berry, base, ore);
 			OreFinder.registerOre(base + ore.name(), bush);
 			config.setBush(bush);

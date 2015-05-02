@@ -8,8 +8,8 @@ public class BerryBushConfigs {
 	private boolean isEnabled = true;
 	private Block bush;
 	private Item berry;
-	private int minY = 0, maxY = 256, maxVeinSize = 4, bushColour;
-	private double genChance = 0.02F, growthChance = 0.03F;
+	private int minY = 0, maxY = 40, maxVeinSize = 4, bushColour;
+	private double genChance = 0.01F, growthChance = 0.03F;
 
 	public BerryBushConfigs(double factor) {
 		genChance /= factor;

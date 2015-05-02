@@ -52,7 +52,7 @@ public class AOBDBBWorldGenerator implements IWorldGenerator {
 				int z = zPos + rand.nextInt(16);
 				// Go from bottom to top trying to find an air block
 				while (y < maxY) {
-					if (isAir(world, x, y, z) && bush.canPlaceBlockAt(world, x, y, z)) {
+					if (isAir(world, x, y, z)) {
 						// When an air block is found, look around it for other air blocks
 						int airsFound = 0;
 						for (BlockPos pos : positions)
@@ -63,10 +63,12 @@ public class AOBDBBWorldGenerator implements IWorldGenerator {
 						if (airsFound >= 10) {
 							int set = 0;
 							for (BlockPos pos : positions)
-								if (isAir(world, x + pos.x, y + pos.y, z + pos.z) && rand.nextFloat() >= 0.5F)
-									if (world.setBlock(x + pos.x, y + pos.y, z + pos.z, bush, 7, 2))
+								if (bush.canPlaceBlockAt(world, x + pos.x, y + pos.y, z + pos.z) && rand.nextFloat() >= 0.5F)
+									if (world.setBlock(x + pos.x, y + pos.y, z + pos.z, bush, AOBDBBBushBlock.MAX_GROWTH_META, 2))
 										if (++set >= veinMaxSize || rand.nextFloat() >= 0.8F && set > 0)
 											break;
+							if (set > 0)
+								System.out.println("generated at: " + x + ", " + y + ", " + z);
 							break;
 						}
 					}

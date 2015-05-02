@@ -81,7 +81,6 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 			if (meta <= MAX_GROWTH_META) {
 				BerryBushConfigs config = BerryBushAddon.bushMap.get(ore);
 				double chance = meta == MAX_GROWTH_META ? config.getGrowthChance() * 0.75 : config.getGrowthChance();
-				chance = 1;
 				if (config != null && rand.nextDouble() <= chance)
 					world.setBlockMetadataWithNotify(x, y, z, ++meta, 2);
 			}

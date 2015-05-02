@@ -64,11 +64,9 @@ public class AOBDBBWorldGenerator implements IWorldGenerator {
 							int set = 0;
 							for (BlockPos pos : positions)
 								if (bush.canPlaceBlockAt(world, x + pos.x, y + pos.y, z + pos.z) && rand.nextFloat() >= 0.5F)
-									if (world.setBlock(x + pos.x, y + pos.y, z + pos.z, bush, AOBDBBBushBlock.MAX_GROWTH_META, 2))
+									if (world.setBlock(x + pos.x, y + pos.y, z + pos.z, bush, AOBDBBBushBlock.MAX_GROWTH_META + rand.nextInt(2), 2))
 										if (++set >= veinMaxSize || rand.nextFloat() >= 0.8F && set > 0)
 											break;
-							if (set > 0)
-								System.out.println("generated at: " + x + ", " + y + ", " + z);
 							break;
 						}
 					}

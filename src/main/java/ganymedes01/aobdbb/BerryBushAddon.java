@@ -85,4 +85,9 @@ public class BerryBushAddon implements IAOBDAddon {
 			GameRegistry.addSmelting(berry, nugget, 0.1F);
 		}
 	}
+
+	@Override
+	public void notifyColourCreation() {
+		ConfigHandler.INSTANCE.initColourConfigs();
+	}
 }

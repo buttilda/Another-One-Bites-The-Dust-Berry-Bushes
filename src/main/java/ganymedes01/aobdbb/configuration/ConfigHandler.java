@@ -28,7 +28,6 @@ public class ConfigHandler {
 		usedCategories.clear();
 		for (Entry<Ore, BerryBushConfigs> entry : BerryBushAddon.bushMap.entrySet())
 			init(entry.getKey().name(), entry.getValue());
-		initColourConfigs();
 	}
 
 	public BerryBushConfigs init(Ore ore) {
@@ -58,7 +57,7 @@ public class ConfigHandler {
 			else if (mean >= 0.5F)
 				bushColour = bushColour.darker();
 
-			config.setBushColour(getColour(ore.name(), "Bush Colour", bushColour.getRGB() & 0x00FFFFFF));
+			config.setBushColour(getColour(ore.name(), "Bush Colour", bushColour.getRGB()));
 			if (configFile.hasChanged())
 				configFile.save();
 		}
@@ -82,6 +81,7 @@ public class ConfigHandler {
 		if (Reference.MOD_ID.equals(eventArgs.modID)) {
 			configFile.load();
 			init();
+			initColourConfigs();
 		}
 	}
 
@@ -98,7 +98,7 @@ public class ConfigHandler {
 	}
 
 	private int getColour(String category, String name, int def) {
-		return Color.decode(getString(category, name, "0x" + Integer.toHexString(def))).getRGB();
+		return Color.decode(getString(category, name, "0x" + Integer.toHexString(def & 0x00FFFFFF))).getRGB();
 	}
 
 	private String getString(String category, String name, String def) {

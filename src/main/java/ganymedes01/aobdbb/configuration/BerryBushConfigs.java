@@ -9,7 +9,7 @@ public class BerryBushConfigs {
 	private Block bush;
 	private Item berry;
 	private int minY = 0, maxY = 40, maxVeinSize = 4, bushColour;
-	private double genChance = 0.01F, growthChance = 0.03F;
+	private double genChance = 0.01, growthChance = 0.04;
 
 	public BerryBushConfigs(double factor) {
 		genChance /= factor;

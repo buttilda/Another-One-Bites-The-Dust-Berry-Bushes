@@ -80,8 +80,7 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 			int meta = world.getBlockMetadata(x, y, z);
 			if (meta <= MAX_GROWTH_META) {
 				BerryBushConfigs config = BerryBushAddon.bushMap.get(ore);
-				double chance = meta == MAX_GROWTH_META ? config.getGrowthChance() * 0.75 : config.getGrowthChance();
-				if (config != null && rand.nextDouble() <= chance)
+				if (config != null && rand.nextDouble() < config.getGrowthChance())
 					world.setBlockMetadataWithNotify(x, y, z, ++meta, 2);
 			}
 		}
@@ -224,7 +223,7 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 		ForgeDirection dir = ForgeDirection.getOrientation(side).getOpposite();
 		if (world.getBlockMetadata(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ) < 7)
 			return true;
-		return Blocks.leaves.isOpaqueCube() && world.getBlock(x, y, z) == this ? false : super.shouldSideBeRendered(world, x, y, z, side);
+		return Blocks.leaves.isOpaqueCube() && world.getBlock(x, y, z) == this && world.getBlockMetadata(x, y, z) >= MAX_GROWTH_META ? false : super.shouldSideBeRendered(world, x, y, z, side);
 	}
 
 	@Override
@@ -243,12 +242,10 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
-		meta = Math.min(MAX_GROWTH_META, meta);
-		if (meta % 2 == 0)
-			meta++;
-		float rate = 1 - (meta + 1) * 2 / 16F;
-		setBlockBounds(rate / 2F, 0, rate / 2F, 1 - rate / 2F, 1 - rate, 1 - rate / 2F);
+		int meta = Math.min(MAX_GROWTH_META, world.getBlockMetadata(x, y, z) + 1);
+		float rate = (float) meta / (float) MAX_GROWTH_META;
+		float t = (1F - rate) / 2F;
+		setBlockBounds(t, 0, t, rate + t, rate, rate + t);
 	}
 
 	@Override

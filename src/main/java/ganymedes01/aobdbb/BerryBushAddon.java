@@ -16,6 +16,8 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -79,11 +81,12 @@ public class BerryBushAddon implements IAOBDAddon {
 				AOBDItem nuggetItem = new AOBDItem("nugget", ore);
 				nugget = new ItemStack(nuggetItem);
 				OreFinder.registerOre("nugget" + ore.name(), nuggetItem);
-
-				GameRegistry.addShapedRecipe(RecipesModule.getOreStack("ingot", ore), "xxx", "xxx", "xxx", 'x', "nugget" + ore.name());
-				GameRegistry.addShapelessRecipe(new ItemStack(nuggetItem, 1, 9), "ingot" + ore.name());
 			} else
 				nugget = RecipesModule.getOreStack("nugget", ore);
+
+			// Add nugget -> ingot and ingot -> nugget recipes
+			GameRegistry.addRecipe(new ShapedOreRecipe(RecipesModule.getOreStack("ingot", ore), "xxx", "xxx", "xxx", 'x', "nugget" + ore.name()));
+			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(nugget.getItem(), nugget.getItemDamage(), 9), "ingot" + ore.name()));
 
 			// Add smelting recipe
 			GameRegistry.addSmelting(berry, nugget, 0.1F);

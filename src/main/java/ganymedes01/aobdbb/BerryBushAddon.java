@@ -29,9 +29,9 @@ public class BerryBushAddon implements IAOBDAddon {
 		for (Ore ore : ores) {
 			if (!ore.isEnabled())
 				continue;
-			if (!OreDictionary.getOres("oreberry" + ore.name(), false).isEmpty())
+			if (!OreDictionary.getOres("oreberry" + ore.name()).isEmpty())
 				continue;
-			if (!OreDictionary.getOres("orebush" + ore.name(), false).isEmpty())
+			if (!OreDictionary.getOres("orebush" + ore.name()).isEmpty())
 				continue;
 
 			BerryBushConfigs config = ConfigHandler.INSTANCE.init(ore);

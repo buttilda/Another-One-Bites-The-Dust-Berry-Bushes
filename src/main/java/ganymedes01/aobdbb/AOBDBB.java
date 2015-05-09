@@ -1,6 +1,5 @@
 package ganymedes01.aobdbb;
 
-import ganymedes01.aobd.api.AOBDAddonManager;
 import ganymedes01.aobdbb.configuration.ConfigHandler;
 import ganymedes01.aobdbb.lib.Reference;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,7 +25,7 @@ public class AOBDBB {
 		ConfigHandler.INSTANCE.preInit(event.getSuggestedConfigurationFile());
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
 
-		AOBDAddonManager.registerAddon(new BerryBushAddon());
+		AddonRegisterer.registerAddon();
 
 		if (event.getSide() == Side.CLIENT)
 			RenderingRegistry.registerBlockHandler(new BushBlockRenderer());

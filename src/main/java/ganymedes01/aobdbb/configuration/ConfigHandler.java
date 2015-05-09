@@ -42,22 +42,7 @@ public class ConfigHandler {
 			Ore ore = entry.getKey();
 			BerryBushConfigs config = entry.getValue();
 
-			Color bushColour = ore.getColour();
-			float r = 1 - bushColour.getRed() / 255F;
-			float g = 1 - bushColour.getGreen() / 255F;
-			float b = 1 - bushColour.getBlue() / 255F;
-			float mean = (r + g + b) / 3F;
-			bushColour = new Color(r, g, b);
-			if (mean <= 0.5F)
-				bushColour = bushColour.brighter();
-			else if (mean <= 0.25F)
-				bushColour = bushColour.brighter().brighter();
-			else if (mean >= 0.75F)
-				bushColour = bushColour.darker().darker();
-			else if (mean >= 0.5F)
-				bushColour = bushColour.darker();
-
-			config.setBushColour(getColour(ore.name(), "Bush Colour", bushColour.getRGB()));
+			config.setBushColour(getColour(ore.name(), "Bush Colour", ore.getColour().getRGB()));
 			if (configFile.hasChanged())
 				configFile.save();
 		}

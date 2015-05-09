@@ -16,6 +16,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -68,6 +69,9 @@ public class BerryBushAddon implements IAOBDAddon {
 			AOBDBlock bush = new AOBDBBBushBlock(berry, base, ore);
 			OreFinder.registerOre(base + ore.name(), bush);
 			config.setBush(bush);
+
+			// Makes bush harvestable by Thaumcraft golems
+			FMLInterModComms.sendMessage("Thaumcraft", "harvestClickableCrop", new ItemStack(bush, 1, AOBDBBBushBlock.MAX_GROWTH_META + 1));
 
 			// Create (if necessary) the nugget item
 			ItemStack nugget;

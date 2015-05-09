@@ -41,7 +41,7 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 
 	@SideOnly(Side.CLIENT)
 	private IIcon fancy, fast, berry, berryOverlay;
-	@SideOnly(Side.CLIENT)
+
 	public RenderingStage renderingStage = RenderingStage.BUSH;
 
 	private final Item berryItem;

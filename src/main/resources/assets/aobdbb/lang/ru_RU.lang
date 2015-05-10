@@ -54,6 +54,9 @@ item.aobdbb.oreberrySteel.name=Кусочки стали
 item.aobdbb.oreberryIridium.name=Кусочки иридия
 item.aobdbb.oreberryTitanium.name=Кусочки титана
 item.aobdbb.oreberryRutile.name=Кусочки рутила
+item.aobdbb.oreberrySilver.name=Кусочки серебра
+item.aobdbb.oreberryTungsten.name=Кусочки вольфрама
+item.aobdbb.oreberryLead.name=Кусочки свинца
 
 # Custom Block Names
 tile.aobdbb.orebushFyrite.name=Фуритовый рудный куст
@@ -105,3 +108,6 @@ tile.aobdbb.orebushSteel.name=Стальной рудный куст
 tile.aobdbb.orebushIridium.name=Иридиевый рудный куст
 tile.aobdbb.orebushTitanium.name=Титановый рудный куст
 tile.aobdbb.orebushRutile.name=Рутиловый рудный куст
+tile.aobdbb.orebushLead.name=Свинцовый рудный куст
+tile.aobdbb.orebushTungsten.name=Вольфрамовый рудный куст
+tile.aobdbb.orebushSilver.name=Серебряный рудный куст

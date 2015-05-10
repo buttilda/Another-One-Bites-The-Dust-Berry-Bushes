@@ -20,6 +20,8 @@ public class AOBDBB {
 	@Instance(Reference.MOD_ID)
 	public static AOBDBB instance;
 
+	public static boolean doBushesPrick = false;
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		ConfigHandler.INSTANCE.preInit(event.getSuggestedConfigurationFile());

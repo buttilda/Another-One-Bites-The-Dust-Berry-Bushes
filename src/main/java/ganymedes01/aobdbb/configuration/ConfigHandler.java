@@ -2,6 +2,7 @@ package ganymedes01.aobdbb.configuration;
 
 import ganymedes01.aobd.lib.Reference;
 import ganymedes01.aobd.ore.Ore;
+import ganymedes01.aobdbb.AOBDBB;
 import ganymedes01.aobdbb.BerryBushAddon;
 
 import java.awt.Color;
@@ -26,6 +27,9 @@ public class ConfigHandler {
 
 	public void init() {
 		usedCategories.clear();
+		usedCategories.add("AOBDBB");
+		AOBDBB.doBushesPrick = configFile.get("AOBDBB", "Do Bushes Prick", AOBDBB.doBushesPrick).setRequiresMcRestart(false).setRequiresWorldRestart(false).getBoolean(AOBDBB.doBushesPrick);
+
 		for (Entry<Ore, BerryBushConfigs> entry : BerryBushAddon.bushMap.entrySet())
 			init(entry.getKey().name(), entry.getValue());
 	}

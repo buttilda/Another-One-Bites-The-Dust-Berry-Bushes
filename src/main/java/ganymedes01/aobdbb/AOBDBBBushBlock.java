@@ -12,12 +12,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -256,6 +259,12 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 	@Override
 	public void setBlockBoundsForItemRender() {
 		setBlockBounds(0, 0, 0, 1, 1, 1);
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+		if (AOBDBB.doBushesPrick && entity instanceof EntityLivingBase)
+			entity.attackEntityFrom(DamageSource.cactus, 1.0F);
 	}
 
 	@Override

@@ -86,7 +86,9 @@ public class BerryBushAddon implements IAOBDAddon {
 
 			// Add nugget -> ingot and ingot -> nugget recipes
 			GameRegistry.addRecipe(new ShapedOreRecipe(RecipesModule.getOreStack("ingot", ore), "xxx", "xxx", "xxx", 'x', "nugget" + ore.name()));
-			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(nugget.getItem(), nugget.getItemDamage(), 9), "ingot" + ore.name()));
+			ItemStack copy = nugget.copy();
+			copy.stackSize = 9;
+			GameRegistry.addRecipe(new ShapelessOreRecipe(copy, "ingot" + ore.name()));
 
 			// Add smelting recipe
 			GameRegistry.addSmelting(berry, nugget, 0.1F);

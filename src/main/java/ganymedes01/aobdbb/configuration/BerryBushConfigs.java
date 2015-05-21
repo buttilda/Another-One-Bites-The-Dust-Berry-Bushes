@@ -2,6 +2,7 @@ package ganymedes01.aobdbb.configuration;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.world.World;
 
 public class BerryBushConfigs {
 
@@ -10,10 +11,26 @@ public class BerryBushConfigs {
 	private Item berry;
 	private int minY = 0, maxY = 40, maxVeinSize = 4, bushColour;
 	private double genChance = 0.01, growthChance = 0.04;
+	private int[] dimensionBlacklist, dimensionWhitelist;
 
-	public BerryBushConfigs(double factor) {
+	public BerryBushConfigs(String name, double factor) {
 		genChance /= factor;
 		growthChance /= factor;
+
+		if ("cobalt".equals(name) || "ardite".equals(name) || "iron".equals(name)) {
+			dimensionBlacklist = new int[] {};
+			dimensionWhitelist = new int[] { -1 };
+			minY = 0;
+			maxY = 120;
+		} else if ("endium".equals(name)) {
+			dimensionBlacklist = new int[] {};
+			dimensionWhitelist = new int[] { 1 };
+			minY = 0;
+			maxY = 120;
+		} else {
+			dimensionBlacklist = new int[] { -1, 1 };
+			dimensionWhitelist = new int[] {};
+		}
 	}
 
 	public boolean isEnabled() {
@@ -86,5 +103,35 @@ public class BerryBushConfigs {
 
 	public void setBushColour(int bushColour) {
 		this.bushColour = bushColour;
+	}
+
+	public int[] getDefaultBlacklistDims() {
+		return dimensionBlacklist;
+	}
+
+	public int[] getDefaultWhitelistDims() {
+		return dimensionWhitelist;
+	}
+
+	public void setDimensionBlacklist(int[] dimensionBlacklist) {
+		this.dimensionBlacklist = dimensionBlacklist;
+	}
+
+	public void setDimensionWhitelist(int[] dimensionWhitelist) {
+		this.dimensionWhitelist = dimensionWhitelist;
+	}
+
+	public boolean isDimensionAllowed(World world) {
+		if (dimensionWhitelist.length != 0)
+			return arrayContainsValue(dimensionWhitelist, world.provider.dimensionId);
+		else
+			return !arrayContainsValue(dimensionBlacklist, world.provider.dimensionId);
+	}
+
+	public boolean arrayContainsValue(int[] array, int value) {
+		for (int id : array)
+			if (id == value)
+				return true;
+		return false;
 	}
 }

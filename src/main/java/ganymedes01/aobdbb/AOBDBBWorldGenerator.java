@@ -38,7 +38,7 @@ public class AOBDBBWorldGenerator implements IWorldGenerator {
 	private void generateBushes(Random rand, int xPos, int zPos, World world) {
 		for (Entry<Ore, BerryBushConfigs> entry : BerryBushAddon.bushMap.entrySet()) {
 			BerryBushConfigs config = entry.getValue();
-			if (!config.isEnabled())
+			if (!config.isEnabled() || !config.isDimensionAllowed(world))
 				continue;
 			Block bush = config.getBush();
 			int minY = config.getMinY();

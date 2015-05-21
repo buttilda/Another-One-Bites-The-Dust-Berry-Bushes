@@ -35,7 +35,7 @@ public class ConfigHandler {
 	}
 
 	public BerryBushConfigs init(Ore ore) {
-		BerryBushConfigs config = new BerryBushConfigs((float) ore.energy(1));
+		BerryBushConfigs config = new BerryBushConfigs(ore.name().toLowerCase(), (float) ore.energy(1));
 		init(ore.name(), config);
 
 		return config;
@@ -59,6 +59,8 @@ public class ConfigHandler {
 		config.setMaxVeinSize(getInt(name, "Max vein size", config.getMaxVeinSize()));
 		config.setGenChance(getDouble(name, "Gen chance", config.getGenChance()));
 		config.setGenChance(getDouble(name, "Growth chance", config.getGrowthChance()));
+		config.setDimensionBlacklist(configFile.get(name, "Dimension Blacklist", config.getDefaultBlacklistDims(), "Won't be used if whiteles is not empty.").getIntList());
+		config.setDimensionWhitelist(configFile.get(name, "Dimension Whitelist", config.getDefaultWhitelistDims(), "If empty left empty blacklist will be used.").getIntList());
 		usedCategories.add(name);
 
 		if (configFile.hasChanged())

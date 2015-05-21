@@ -17,7 +17,7 @@ public class BerryBushConfigs {
 		genChance /= factor;
 		growthChance /= factor;
 
-		if ("cobalt".equals(name) || "ardite".equals(name) || "iron".equals(name)) {
+		if ("cobalt".equals(name) || "ardite".equals(name)) {
 			dimensionBlacklist = new int[] {};
 			dimensionWhitelist = new int[] { -1 };
 			minY = 0;

@@ -59,8 +59,8 @@ public class ConfigHandler {
 		config.setMaxVeinSize(getInt(name, "Max vein size", config.getMaxVeinSize()));
 		config.setGenChance(getDouble(name, "Gen chance", config.getGenChance()));
 		config.setGenChance(getDouble(name, "Growth chance", config.getGrowthChance()));
-		config.setDimensionBlacklist(configFile.get(name, "Dimension Blacklist", config.getDefaultBlacklistDims(), "Won't be used if whiteles is not empty.").getIntList());
-		config.setDimensionWhitelist(configFile.get(name, "Dimension Whitelist", config.getDefaultWhitelistDims(), "If empty left empty blacklist will be used.").getIntList());
+		config.setDimensionBlacklist(configFile.get(name, "Dimension Blacklist", config.getDefaultBlacklistDims(), "Won't be used unless whitelist is empty.").getIntList());
+		config.setDimensionWhitelist(configFile.get(name, "Dimension Whitelist", config.getDefaultWhitelistDims(), "If empty left empty, blacklist will be used instead.").getIntList());
 		usedCategories.add(name);
 
 		if (configFile.hasChanged())

@@ -1,10 +1,12 @@
 package ganymedes01.aobdbb;
 
 import ganymedes01.aobdbb.configuration.ConfigHandler;
+import ganymedes01.aobdbb.integrations.MFRIntegration;
 import ganymedes01.aobdbb.lib.Reference;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -44,5 +46,8 @@ public class AOBDBB {
 		ConfigHandler.INSTANCE.init();
 
 		GameRegistry.registerWorldGenerator(new AOBDBBWorldGenerator(), 0);
+
+		if (Loader.isModLoaded("MineFactoryReloaded"))
+			MFRIntegration.registerBushes();
 	}
 }

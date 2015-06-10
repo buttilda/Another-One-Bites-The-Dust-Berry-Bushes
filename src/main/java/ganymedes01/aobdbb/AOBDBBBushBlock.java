@@ -91,14 +91,14 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		if (world.getBlock(x, y - 1, z).isSideSolid(world, x, y - 1, z, ForgeDirection.UP))
+		if (World.doesBlockHaveSolidTopSurface(world, x, y - 1, z))
 			return super.canPlaceBlockAt(world, x, y, z);
 		return false;
 	}
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
-		return world.getBlock(x, y - 1, z).isSideSolid(world, x, y - 1, z, ForgeDirection.UP);
+		return World.doesBlockHaveSolidTopSurface(world, x, y - 1, z);
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
 		if (!canBlockStay(world, x, y, z)) {
 			dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-			world.setBlockToAir(x, y, z);
+			world.setBlock(x, y, z, Blocks.air, 0, 2); // Need this flag or it can cause an StackOverflow on worldgen.
 		}
 	}
 

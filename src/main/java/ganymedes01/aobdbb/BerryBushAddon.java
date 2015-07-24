@@ -91,7 +91,7 @@ public class BerryBushAddon implements IAOBDAddon {
 			GameRegistry.addRecipe(new ShapelessOreRecipe(copy, "ingot" + ore.name()));
 
 			// Add smelting recipe
-			GameRegistry.addSmelting(berry, nugget, 0.1F);
+			GameRegistry.addSmelting(new ItemStack(berry), nugget, 0.1F);
 		}
 	}
 

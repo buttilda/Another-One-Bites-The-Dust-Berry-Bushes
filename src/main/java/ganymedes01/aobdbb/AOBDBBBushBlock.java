@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -31,7 +30,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable {
+public class AOBDBBBushBlock extends AOBDBlock implements IPlantable {
 
 	public static enum RenderingStage {
 		BUSH,
@@ -163,23 +162,6 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 		}
 	}
 
-	// Growable
-
-	@Override
-	public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
-		return world.getBlockMetadata(x, y, z) != MAX_GROWTH_META;
-	}
-
-	@Override
-	public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
-		return true;
-	}
-
-	@Override
-	public void func_149853_b(World world, Random rand, int x, int y, int z) {
-		world.setBlockMetadataWithNotify(x, y, z, Math.min(MAX_GROWTH_META, world.getBlockMetadata(x, y, z) + 1), 2);
-	}
-
 	// Rendering
 
 	@Override
@@ -245,8 +227,8 @@ public class AOBDBBBushBlock extends AOBDBlock implements IPlantable, IGrowable 
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		int meta = Math.min(MAX_GROWTH_META, world.getBlockMetadata(x, y, z) + 1);
-		float rate = (float) meta / (float) MAX_GROWTH_META;
+		int meta = Math.min(MAX_GROWTH_META + 1, world.getBlockMetadata(x, y, z) + 1);
+		float rate = (float) meta / (float) (MAX_GROWTH_META + 1);
 		float t = (1F - rate) / 2F;
 		setBlockBounds(t, 0, t, rate + t, rate, rate + t);
 	}

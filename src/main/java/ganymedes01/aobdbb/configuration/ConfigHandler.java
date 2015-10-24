@@ -29,6 +29,7 @@ public class ConfigHandler {
 		usedCategories.clear();
 		usedCategories.add("AOBDBB");
 		AOBDBB.doBushesPrick = configFile.get("AOBDBB", "Do Bushes Prick", AOBDBB.doBushesPrick).setRequiresMcRestart(false).setRequiresWorldRestart(false).getBoolean(AOBDBB.doBushesPrick);
+		AOBDBB.canBushedBeBonemealed = configFile.get("AOBDBB", "Can bushes be bonemealed to generate new berries", AOBDBB.canBushedBeBonemealed).setRequiresMcRestart(false).setRequiresWorldRestart(false).getBoolean(AOBDBB.canBushedBeBonemealed);
 
 		for (Entry<Ore, BerryBushConfigs> entry : BerryBushAddon.bushMap.entrySet())
 			init(entry.getKey().name(), entry.getValue());

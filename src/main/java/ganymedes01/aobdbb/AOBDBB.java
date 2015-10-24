@@ -3,7 +3,9 @@ package ganymedes01.aobdbb;
 import ganymedes01.aobdbb.configuration.ConfigHandler;
 import ganymedes01.aobdbb.integrations.MFRIntegration;
 import ganymedes01.aobdbb.lib.Reference;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.BonemealEvent;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -13,6 +15,8 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -23,6 +27,7 @@ public class AOBDBB {
 	public static AOBDBB instance;
 
 	public static boolean doBushesPrick = false;
+	public static boolean canBushedBeBonemealed = false;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -49,5 +54,22 @@ public class AOBDBB {
 
 		if (Loader.isModLoaded("MineFactoryReloaded"))
 			MFRIntegration.registerBushes();
+	}
+
+	@SubscribeEvent
+	public void onBonemeal(BonemealEvent event) {
+		World world = event.world;
+		int x = event.x;
+		int y = event.y;
+		int z = event.z;
+
+		if (world.getBlock(x, y, z) instanceof AOBDBBBushBlock) {
+			int meta = world.getBlockMetadata(x, y, z);
+			int maxMeta = AOBDBB.canBushedBeBonemealed ? AOBDBBBushBlock.MAX_GROWTH_META + 1 : AOBDBBBushBlock.MAX_GROWTH_META;
+			if (meta < maxMeta) {
+				world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
+				event.setResult(Result.ALLOW);
+			}
+		}
 	}
 }

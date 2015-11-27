@@ -1,5 +1,13 @@
 package ganymedes01.aobdbb;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ganymedes01.aobd.api.IAOBDAddon;
 import ganymedes01.aobd.blocks.AOBDBlock;
 import ganymedes01.aobd.items.AOBDItem;
@@ -9,19 +17,10 @@ import ganymedes01.aobd.recipes.RecipesModule;
 import ganymedes01.aobdbb.configuration.BerryBushConfigs;
 import ganymedes01.aobdbb.configuration.ConfigHandler;
 import ganymedes01.aobdbb.lib.Reference;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BerryBushAddon implements IAOBDAddon {
 

@@ -1,13 +1,15 @@
 package ganymedes01.aobdbb;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ganymedes01.aobd.blocks.AOBDBlock;
 import ganymedes01.aobd.ore.Ore;
 import ganymedes01.aobdbb.configuration.BerryBushConfigs;
 import ganymedes01.aobdbb.lib.Reference;
-
-import java.util.ArrayList;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,9 +28,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class AOBDBBBushBlock extends AOBDBlock implements IPlantable {
 

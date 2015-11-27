@@ -1,14 +1,13 @@
 package ganymedes01.aobdbb.integrations;
 
-import ganymedes01.aobdbb.AOBDBBBushBlock;
-import ganymedes01.aobdbb.BerryBushAddon;
-import ganymedes01.aobdbb.configuration.BerryBushConfigs;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import ganymedes01.aobdbb.AOBDBBBushBlock;
+import ganymedes01.aobdbb.BerryBushAddon;
+import ganymedes01.aobdbb.configuration.BerryBushConfigs;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

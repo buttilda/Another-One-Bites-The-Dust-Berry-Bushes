@@ -1,11 +1,5 @@
 package ganymedes01.aobdbb;
 
-import ganymedes01.aobdbb.configuration.ConfigHandler;
-import ganymedes01.aobdbb.integrations.MFRIntegration;
-import ganymedes01.aobdbb.lib.Reference;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.BonemealEvent;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -19,6 +13,12 @@ import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import ganymedes01.aobdbb.configuration.ConfigHandler;
+import ganymedes01.aobdbb.integrations.MFRIntegration;
+import ganymedes01.aobdbb.lib.Reference;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.BonemealEvent;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_NUMBER, dependencies = Reference.DEPENDENCIES, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class AOBDBB {

@@ -1,18 +1,17 @@
 package ganymedes01.aobdbb;
 
-import ganymedes01.aobd.ore.Ore;
-import ganymedes01.aobdbb.configuration.BerryBushConfigs;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import cpw.mods.fml.common.IWorldGenerator;
+import ganymedes01.aobd.ore.Ore;
+import ganymedes01.aobdbb.configuration.BerryBushConfigs;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
-import cpw.mods.fml.common.IWorldGenerator;
 
 public class AOBDBBWorldGenerator implements IWorldGenerator {
 
